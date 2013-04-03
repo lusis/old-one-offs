@@ -1,0 +1,1001 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title></title>
+<meta name="Generator" content="Vim reStructured Text b22 - Vim7.0" />
+
+<style type="text/css">
+body { background-color: #fff; margin: 0px 10%; min-width: 720px; font-family: Verdana, sans-serif;
+       counter-reset: chapter section subsection subsubsection paragraph lchapter lsection lsubsection lsubsubsection lparagraph}
+div.footnote { border-left: 1px solid #000; margin-left: 0em; clear: both }
+div.ftext { position: relative; margin-left: 50px }
+div.fnumber { float: left; width: 40px; padding: 0em; margin-left: 0.5em; margin-top: 0em }
+div.fnumber a { margin: 0px; padding: 0px }
+div.ctext { position: relative; margin-left: 100px }
+div.cnumber { float: left; width: 90px; padding: 0em; margin-left: 0.5em; margin-top: 0em }
+div.cnumber a { margin: 0px; padding: 0px }
+div.tip { border: 2px solid #0d0; margin: 0.5em 2em 1em 2em; padding: 0em 1em }
+div.warning, div.caution, div.danger, div.error { border: 2px solid #f00; margin: 0.5em 2em 1em 2em; padding: 0em 1em }
+div.note, div.hint, div.important { border: 2px solid #000; margin: 0.5em 2em 1em 2em; padding: 0em 1em }
+div.figure { display: block; padding: 1em; width: 400px; clear: both}
+div.topic { margin: 2em }
+div.vstsidebar, div.sidebar { border: 2px solid #aaa; background-color: #ffffee; float: right; width: 40%; margin-left: 1em; margin-right: -1em; padding: 1em }
+span.strike { text-decoration: line-through }
+span.big { font-size: large }
+span.small { font-size: small }
+span.title { font-style: italic }
+span.toc { font-size: large; font-weight: 900 }
+span.notetitle { font-size: large; font-weight: 900; font-family: Verdana, sans-serif }
+p.notesubtitle { font-weight: 900; font-family: Verdana, sans-serif }
+p.attribution { font-style: italic; margin-left: 8em; text-indent: -1.4em }
+.vstright { float: right; margin: 1em }
+.vstleft { float: left; margin: 1em }
+.vstcenter { margin: 1em; margin-left: auto; margin-right: auto }
+blockquote.pull { font-size: large }
+p.rubric { font-size: large; margin-left: 2em }
+dd.normal { margin-bottom: 0.5em }
+dt.option { float: left; margin: 0em 0em 5px 2em; padding: 0px; font-family: monospace }
+dd.option { margin: 0px; padding: 0px; margin: 0em 0em 5px 10em; text-indent: 0.5em }
+dd.option > p { margin: 0px }
+dd.normal > p { margin: 0px }
+table { border-collapse: collapse; margin: 0.5em; margin-left: 0em; margin-right: 0em }
+thead, tfoot { text-align: center; font-weight: bold }
+td { border: 1px solid #000; padding: 0.25em; _top: 0%; vertical-align: top }
+td blockquote p{ margin: 0px; padding: 0px}
+td blockquote { margin: 0px; padding: 0px}
+table.vstbless td { border: 0px solid #000; padding: 0.25em; _top: 0%; vertical-align: top }
+td > p { margin: 0px }
+table.field { border: 0px solid #000; margin-left: 2em; padding: 0.25em; _top: 0%; vertical-align: top }
+td.fkey { font-weight: 900 }
+td.fval { border: 0px solid #000; padding: 0.25em; _top: 0%; vertical-align: top }
+td.fkey { font-weight: 900; border: 0px solid #000; padding: 0.25em; _top: 0%; vertical-align: top }
+td.fdkey { text-align: center; font-weight: 900 }
+td.fdval { text-align: center; font-style: italic }
+td.fakey { text-align: center; font-weight: 900 }
+td.faval { border: 0px solid #000; padding: 0.25em; _top: 0%; vertical-align: top }
+hr { width: 80%; margin: 1.5em auto }
+h1 { text-align: center; clear: both }
+h2, h3, h4, h5, h6 { text-align: left; margin-top: 1em; clear: both }
+h2 { counter-reset: section subsection subsubsection paragraph }
+h3 { counter-reset: subsection subsubsection paragraph }
+h4 { counter-reset: subsubsection paragraph }
+h5 { counter-reset: paragraph }
+h1 a { color: black }
+h2 a { color: black }
+h3 a { color: black }
+h4 a { color: black }
+h5 a { color: black }
+h6 a { color: black }
+p.subh1 { text-align: center; font-size: 120%; font-variant: small-caps }
+p.subh2, p.subh3, p.subh4, p.subh5, p.subh6 { text-align: left; font-size: 120%; font-variant: small-caps }
+h2:before { content: counter(chapter)" "; counter-increment: chapter }
+h3:before { content: counter(chapter)"."counter(section)" "; counter-increment: section }
+h4:before { content: counter(chapter)"."counter(section)"."counter(subsection)" "; counter-increment: subsection }
+h5:before { content: counter(chapter)"."counter(section)"."counter(subsection)"."counter(subsubsection)" "; counter-increment: subsubsection }
+h6:before { content: counter(chapter)"."counter(section)"."counter(subsection)"."counter(subsubsection)"."counter(paragraph)" "; counter-increment: paragraph}
+li.h1 { margin-left: 0em }
+li.h2 { margin-left: 1em; counter-reset: lsection lsubsection lsubsubsection lparagraph }
+li.h3 { margin-left: 2em; counter-reset: lsubsection lsubsubsection lparagraph }
+li.h4 { margin-left: 3em; counter-reset: lsubsubsection lparagraph }
+li.h5 { margin-left: 4em; counter-reset: lparagraph }
+li.h2:before { content: counter(lchapter)" "; counter-increment: lchapter }
+li.h3:before { content: counter(lchapter)"."counter(lsection)" "; counter-increment: lsection }
+li.h4:before { content: counter(lchapter)"."counter(lsection)"."counter(lsubsection)" "; counter-increment: lsubsection }
+li.h5:before { content: counter(lchapter)"."counter(lsection)"."counter(lsubsection)"."counter(lsubsubsection)" "; counter-increment: lsubsubsection }
+li.h6:before { content: counter(lchapter)"."counter(lsection)"."counter(lsubsection)"."counter(lsubsubsection)"."counter(lparagraph)" "; counter-increment: lparagraph}
+li.h6 { margin-left: 5em }
+ol, ul { margin-bottom: 0.5em; margin-top: 0.5em }
+ol.loweralpha { list-style-type: lower-alpha }
+ol.upperalpha { list-style-type: upper-alpha }
+ol.lowerroman { list-style-type: lower-roman }
+ol.upperroman { list-style-type: upper-roman }
+ol.decimal { list-style-type: decimal }
+ul.square { list-style-type: square }
+ul.circle { list-style-type: circle }
+ul.disc { list-style-type: disc }
+li > p { margin: 0em }
+img { border: 1px solid #000; padding: 0em; display: block; margin: 1em; margin-left: auto; margin-right: auto }
+img.inline { border: 1px solid #000; padding: 0em; margin: 0em; display: inline }
+pre { background-color: #eee; margin-left: 2em; clear: both; overflow: auto }
+div.unknown { font-family: monospace; background-color: #fff; margin: 1em; padding: 1em; clear: both; border: 3px solid red}
+pre.quoted { background-color: #eee; margin-left: 0em; clear: both; overflow: auto  }
+pre.rawlatex { background-color: #ddd; border: 1px solid #000; padding: 0.1em; clear: both; overflow: auto  }
+pre.address { font-family: Verdana, sans-serif; display: inline; margin: 0px; background-color: #fff; overflow: auto }
+span.target { text-decoration: underline }
+div.vstfooter hr { width: 100%; margin: 0px; margin-top: 0em }
+div.vstfooter p { margin: 0px }
+</style>
+
+</head>
+<body>
+
+<dl>
+
+<dt class="normal">&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" </dt>
+        <dd class="normal">
+        
+
+<p>
+"<a href="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd</a>"&gt; 
+&lt;html xmlns="<a href="http://www.w3.org/1999/xhtml">http://www.w3.org/1999/xhtml</a>" lang="" xml:lang=""&gt;
+&lt;head&gt;
+&lt;meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" /&gt;
+&lt;title&gt;websphere-perl-rrd.txt&lt;/title&gt;
+&lt;meta name="Generator" content="Vim reStructured Text b22 - Vim7.0" /&gt;
+</p>
+
+
+<p>
+&lt;style type="text/css"&gt;
+body { background-color: #fff; margin: 0px 10%; min-width: 720px; font-family: Verdana, sans-serif;
+       counter-reset: chapter section subsection subsubsection paragraph lchapter lsection lsubsection lsubsubsection lparagraph}
+div.footnote { border-left: 1px solid #000; margin-left: 0em; clear: both }
+div.ftext { position: relative; margin-left: 50px }
+div.fnumber { float: left; width: 40px; padding: 0em; margin-left: 0.5em; margin-top: 0em }
+div.fnumber a { margin: 0px; padding: 0px }
+div.ctext { position: relative; margin-left: 100px }
+div.cnumber { float: left; width: 90px; padding: 0em; margin-left: 0.5em; margin-top: 0em }
+div.cnumber a { margin: 0px; padding: 0px }
+div.tip { border: 2px solid #0d0; margin: 0.5em 2em 1em 2em; padding: 0em 1em }
+div.warning, div.caution, div.danger, div.error { border: 2px solid #f00; margin: 0.5em 2em 1em 2em; padding: 0em 1em }
+div.note, div.hint, div.important { border: 2px solid #000; margin: 0.5em 2em 1em 2em; padding: 0em 1em }
+div.figure { display: block; padding: 1em; width: 400px; clear: both}
+div.topic { margin: 2em }
+div.vstsidebar, div.sidebar { border: 2px solid #aaa; background-color: #ffffee; float: right; width: 40%; margin-left: 1em; margin-right: -1em; padding: 1em }
+span.strike { text-decoration: line-through }
+span.big { font-size: large }
+span.small { font-size: small }
+span.title { font-style: italic }
+span.toc { font-size: large; font-weight: 900 }
+span.notetitle { font-size: large; font-weight: 900; font-family: Verdana, sans-serif }
+p.notesubtitle { font-weight: 900; font-family: Verdana, sans-serif }
+p.attribution { font-style: italic; margin-left: 8em; text-indent: -1.4em }
+.vstright { float: right; margin: 1em }
+.vstleft { float: left; margin: 1em }
+.vstcenter { margin: 1em; margin-left: auto; margin-right: auto }
+blockquote.pull { font-size: large }
+p.rubric { font-size: large; margin-left: 2em }
+dd.normal { margin-bottom: 0.5em }
+dt.option { float: left; margin: 0em 0em 5px 2em; padding: 0px; font-family: monospace }
+dd.option { margin: 0px; padding: 0px; margin: 0em 0em 5px 10em; text-indent: 0.5em }
+dd.option &gt; p { margin: 0px }
+dd.normal &gt; p { margin: 0px }
+table { border-collapse: collapse; margin: 0.5em; margin-left: 0em; margin-right: 0em }
+thead, tfoot { text-align: center; font-weight: bold }
+td { border: 1px solid #000; padding: 0.25em; <span id="ltop" title="top" class="target">top</span>: 0%; vertical-align: top }
+td blockquote p{ margin: 0px; padding: 0px}
+td blockquote { margin: 0px; padding: 0px}
+table.vstbless td { border: 0px solid #000; padding: 0.25em; <span id="ltop" title="top" class="target">top</span>: 0%; vertical-align: top }
+td &gt; p { margin: 0px }
+table.field { border: 0px solid #000; margin-left: 2em; padding: 0.25em; <span id="ltop" title="top" class="target">top</span>: 0%; vertical-align: top }
+td.fkey { font-weight: 900 }
+td.fval { border: 0px solid #000; padding: 0.25em; <span id="ltop" title="top" class="target">top</span>: 0%; vertical-align: top }
+td.fkey { font-weight: 900; border: 0px solid #000; padding: 0.25em; <span id="ltop" title="top" class="target">top</span>: 0%; vertical-align: top }
+td.fdkey { text-align: center; font-weight: 900 }
+td.fdval { text-align: center; font-style: italic }
+td.fakey { text-align: center; font-weight: 900 }
+td.faval { border: 0px solid #000; padding: 0.25em; <span id="ltop" title="top" class="target">top</span>: 0%; vertical-align: top }
+hr { width: 80%; margin: 1.5em auto }
+h1 { text-align: center; clear: both }
+h2, h3, h4, h5, h6 { text-align: left; margin-top: 1em; clear: both }
+h2 { counter-reset: section subsection subsubsection paragraph }
+h3 { counter-reset: subsection subsubsection paragraph }
+h4 { counter-reset: subsubsection paragraph }
+h5 { counter-reset: paragraph }
+h1 a { color: black }
+h2 a { color: black }
+h3 a { color: black }
+h4 a { color: black }
+h5 a { color: black }
+h6 a { color: black }
+p.subh1 { text-align: center; font-size: 120%; font-variant: small-caps }
+p.subh2, p.subh3, p.subh4, p.subh5, p.subh6 { text-align: left; font-size: 120%; font-variant: small-caps }
+h2:before { content: counter(chapter)" "; counter-increment: chapter }
+h3:before { content: counter(chapter)"."counter(section)" "; counter-increment: section }
+h4:before { content: counter(chapter)"."counter(section)"."counter(subsection)" "; counter-increment: subsection }
+h5:before { content: counter(chapter)"."counter(section)"."counter(subsection)"."counter(subsubsection)" "; counter-increment: subsubsection }
+h6:before { content: counter(chapter)"."counter(section)"."counter(subsection)"."counter(subsubsection)"."counter(paragraph)" "; counter-increment: paragraph}
+li.h1 { margin-left: 0em }
+li.h2 { margin-left: 1em; counter-reset: lsection lsubsection lsubsubsection lparagraph }
+li.h3 { margin-left: 2em; counter-reset: lsubsection lsubsubsection lparagraph }
+li.h4 { margin-left: 3em; counter-reset: lsubsubsection lparagraph }
+li.h5 { margin-left: 4em; counter-reset: lparagraph }
+li.h2:before { content: counter(lchapter)" "; counter-increment: lchapter }
+li.h3:before { content: counter(lchapter)"."counter(lsection)" "; counter-increment: lsection }
+li.h4:before { content: counter(lchapter)"."counter(lsection)"."counter(lsubsection)" "; counter-increment: lsubsection }
+li.h5:before { content: counter(lchapter)"."counter(lsection)"."counter(lsubsection)"."counter(lsubsubsection)" "; counter-increment: lsubsubsection }
+li.h6:before { content: counter(lchapter)"."counter(lsection)"."counter(lsubsection)"."counter(lsubsubsection)"."counter(lparagraph)" "; counter-increment: lparagraph}
+li.h6 { margin-left: 5em }
+ol, ul { margin-bottom: 0.5em; margin-top: 0.5em }
+ol.loweralpha { list-style-type: lower-alpha }
+ol.upperalpha { list-style-type: upper-alpha }
+ol.lowerroman { list-style-type: lower-roman }
+ol.upperroman { list-style-type: upper-roman }
+ol.decimal { list-style-type: decimal }
+ul.square { list-style-type: square }
+ul.circle { list-style-type: circle }
+ul.disc { list-style-type: disc }
+li &gt; p { margin: 0em }
+img { border: 1px solid #000; padding: 0em; display: block; margin: 1em; margin-left: auto; margin-right: auto }
+img.inline { border: 1px solid #000; padding: 0em; margin: 0em; display: inline }
+pre { background-color: #eee; margin-left: 2em; clear: both; overflow: auto }
+div.unknown { font-family: monospace; background-color: #fff; margin: 1em; padding: 1em; clear: both; border: 3px solid red}
+pre.quoted { background-color: #eee; margin-left: 0em; clear: both; overflow: auto  }
+pre.rawlatex { background-color: #ddd; border: 1px solid #000; padding: 0.1em; clear: both; overflow: auto  }
+pre.address { font-family: Verdana, sans-serif; display: inline; margin: 0px; background-color: #fff; overflow: auto }
+span.target { text-decoration: underline }
+div.vstfooter hr { width: 100%; margin: 0px; margin-top: 0em }
+div.vstfooter p { margin: 0px }
+&lt;/style&gt;
+</p>
+
+<p>
+&lt;/head&gt;
+&lt;body&gt;
+</p>
+
+<dl>
+
+<dt class="normal">&lt;!-- .. warning:</dt>
+    <dd class="normal">
+    
+
+<p>
+&lt;blockquote&gt;
+</p>
+
+
+    <p>
+    &lt;p&gt;
+    What I'm about to show you is the ugliest hack I think I've ever done.
+    &lt;/p&gt;
+    </p>
+
+    <p>
+    &lt;/blockquote&gt;
+ --&gt;
+    </p>
+
+</dd>
+</dl>
+
+<p>
+&lt;p&gt;
+This is how we get stats from our Websphere 5.x servers into an RRD database.
+We're not pulling this into Nagios just yet because I'm trying to use
+perfparse less and looking for an alternate graphing solution.
+&lt;/p&gt;
+</p>
+
+<p>
+&lt;p&gt;
+(FWIW, my only complaint with perfparse is the inability to graph multiple
+values on a single graph.)
+&lt;/p&gt;
+</p>
+
+<p>
+&lt;p&gt;
+So on to the script.
+&lt;/p&gt;
+</p>
+
+<p>
+&lt;p&gt;
+The first thing that will need to happen is configuration on the WebSphere
+side. This means installing the PerfServletApp.ear distributed with WebSphere
+Application Server (which I'll refer to as WAS from here on out).
+&lt;/p&gt;
+</p>
+
+<p>
+&lt;p&gt;
+If you didn't install it when you did the original install, then you'll have
+to install it manually. Unfortunately (or fortunately if you like the command
+line like me), you cannot use the GUI to install the perf servlet (or the
+admin console for that matter). You'll need to use a little Jacl or Jython and
+wsadmin to do the job. I'm a Jacl kind of guy myself since I picked up tcl
+many moons ago.
+&lt;/p&gt;
+</p>
+
+<p>
+&lt;p&gt;
+I like to save all the jacl stuff into a script even if I don't think I'll
+ever use it again. The interactive mode is nice but calling a file is quicker.
+&lt;/p&gt;
+</p>
+
+<p>
+&lt;p&gt;
+Steps to installing the PerfServletApp.ear:
+&lt;/p&gt;
+</p>
+
+    <blockquote>
+
+    <p>
+    &lt;ol class="decimal"&gt;
+&lt;li&gt;
+    </p>
+
+    </blockquote>
+
+<p>
+&lt;p&gt;
+Check and see if you have the perf servlet installed already:
+&lt;/p&gt;
+</p>
+
+<dl>
+
+<dt class="normal">&lt;pre&gt;</dt>
+ <dd class="normal">
+ 
+<dl class="option">
+
+<dt class="option">/opt/WebSphere/AppServer/bin/wsadmin.sh -c '$AdminApp list'
+WASX7209I: Connected to process "server1" on node qawas04 using SOAP
+connector;</dt>
+<dd class="option">
+<p>The type of process is: UnManagedProcess
+adminconsole
+qa-02.018.04
+qa-02.018.05
+&lt;/pre&gt;</p>
+</dd>
+</dl>
+
+    <blockquote>
+
+    <p>
+    &lt;/li&gt;    &lt;/ol&gt;
+    </p>
+
+    <p>
+    &lt;p&gt;
+    You can see we have three apps deployed:
+    &lt;/p&gt;
+    </p>
+
+        <blockquote>
+
+        <p>
+        &lt;ul class="disc"&gt;
+&lt;li&gt;
+        </p>
+
+        </blockquote>
+    </blockquote>
+
+<p>
+&lt;p&gt;
+adminconsole
+&lt;/p&gt;
+</p>
+
+<p>
+&lt;/li&gt;
+&lt;li&gt;
+</p>
+
+<p>
+&lt;p&gt;
+qa-02.018.04
+&lt;/p&gt;
+</p>
+
+<p>
+&lt;/li&gt;
+&lt;li&gt;
+</p>
+
+<p>
+&lt;p&gt;
+qa-02.018.05
+&lt;/p&gt;
+</p>
+
+    <blockquote>
+
+    <p>
+    &lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;ol class="decimal" start="2"&gt;
+&lt;li&gt;
+    </p>
+
+    </blockquote>
+
+<p>
+&lt;p&gt;
+Install the PerfServletApp.ear.
+&lt;/p&gt;
+</p>
+
+        <blockquote>
+
+        <p>
+        &lt;blockquote&gt;
+        </p>
+
+        <p>
+        &lt;p&gt;
+        I suggest that this be done using a .jacl file since there are
+        multiple command (okay TWO command) that need to be issued instead of
+        one. The first is a call to install and the second is a call to save
+        the configuration
+        &lt;/p&gt;
+        </p>
+
+        <p>
+        &lt;p&gt;
+        Open up vi (natch!) and put these lines in it:
+        &lt;/p&gt;
+        </p>
+
+        </blockquote>
+<dl>
+
+<dt class="normal">&lt;pre&gt;</dt>
+ <dd class="normal">
+ 
+
+<p>
+$AdminApp install PerfServletApp.ear
+$AdminConfig save
+&lt;/pre&gt;
+</p>
+
+
+        <blockquote>
+
+        <p>
+        &lt;p&gt;
+        Save the file as "perfinstall.jacl"
+        &lt;/p&gt;
+        </p>
+
+        <p>
+        &lt;/blockquote&gt;
+    &lt;/li&gt;    
+&lt;li&gt;
+        </p>
+
+        </blockquote>
+
+<p>
+&lt;p&gt;
+Install the application into WebSphere.
+&lt;/p&gt;
+</p>
+
+        <blockquote>
+
+        <p>
+        &lt;blockquote&gt;
+        </p>
+
+        <p>
+        &lt;p&gt;
+        Normally you could install the application via the admin interface but
+        in this case you cannot. Using the new Jacl file, we're going to
+        install install the application (making sure the EAR file is in the
+        same directory as the Jacl script:
+        &lt;/p&gt;
+        </p>
+
+        </blockquote>
+<dl>
+
+<dt class="normal">&lt;pre&gt;</dt>
+ <dd class="normal">
+ 
+<dl class="option">
+/opt/WebSphere/AppServer/bin/wsadmin.sh -conntype NONE -f perfinstall.jacl
+&lt;/pre&gt;</p>
+</dd>
+</dl>
+
+        <blockquote>
+
+        <p>
+        &lt;p&gt;
+        The key in this line is to use -conntype NONE. Adminconsole and the
+        perf tool exist outside of your normal WAS applications. The
+        "-conntype NONE" causes wsadmin to use a local connection to the
+        server outside of the normal interfaces.
+        &lt;/p&gt;
+        </p>
+
+        <p>
+        &lt;p&gt;
+        Once you run the script, you should get output from the install
+        process that the application was installed successfully:
+        &lt;/p&gt;
+        </p>
+
+        </blockquote>
+<dl>
+
+<dt class="normal">&lt;pre&gt;</dt>
+ <dd class="normal">
+ 
+
+<p>
+WASX7357I: By request, this scripting client is not connected to
+any server process. Certain configuration and application
+operations will be available in local mode.
+ADMA0073W: Custom permissions are found in the
+[(com.ibm.websphere.security.WebSphereRuntimePermission
+AdminPermission),
+(com.ibm.websphere.security.WebSphereRuntimePermission
+accessRuntimeClasses)] policy file. Custom permissions can
+compromise the integrity of Java 2 Security.
+WASX7327I: Contents of was.policy file:
+grant codeBase "file:${application}" {
+permission
+com.ibm.websphere.security.WebSphereRuntimePermission
+"AdminPermission";
+permission
+com.ibm.websphere.security.WebSphereRuntimePermission
+"accessRuntimeClasses";
+};
+grant codeBase "file:${application}" {
+permission java.io.FilePermission
+"${was.install.root}${/}lib${/}ffdc.jar", "read";
+};
+null, false, 0
+================== qawas04
+ADMA6010I: The tasks are
+[com.ibm.ws.webservices.deploy.WSDeployTask,
+com.ibm.ws.management.application.task.ConfigureTask,
+com.ibm.ws.management.application.task.BackupAppTask]
+ADMA5016I: Installation of perfServletApp started.
+ADMA6017I: Saved document
+/opt/WebSphere/AppServer/wstemp/Script10c22887099/workspace/cells/qawas04/applications/perfServletApp.ear/deployments/perfServletApp/deployment.xml
+</p>
+
+
+        <p>
+        ....... TRUNCATED TEXT .........
+        </p>
+
+        <p>
+        ADMA6016I: Add to workspace
+        perfServletApp.war/WEB-INF/web.xml
+        ADMA5005I: Application perfServletApp configured in
+        WebSphere repository
+        ADMA5037I: Starting backup of app at
+        /opt/WebSphere/AppServer/wstemp/Script10c22887099/workspace/cells/qawas04/applications/perfServletApp.ear
+        ADMA5038I: Completed backup of app at
+        /opt/WebSphere/AppServer/wstemp/Script10c22887099/workspace/cells/qawas04/applications/perfServletApp.ear/perfServletApp.ear
+        ADMA5001I: Application binaries saved in
+        /opt/WebSphere/AppServer/wstemp/Script10c22887099/workspace/cells/qawas04/applications/perfServletApp.ear/perfServletApp.ear
+        ADMA6011I: Deleting directory tree /tmp/app_10c228880ce
+        ADMA5011I: Cleanup of temp dir for app perfServletApp done.
+        ADMA5013I: Application perfServletApp installed
+        successfully.
+&lt;/pre&gt;
+        </p>
+
+        <p>
+        &lt;p&gt;
+        And the application is installed.
+        &lt;/p&gt;
+        </p>
+
+        <p>
+        &lt;/blockquote&gt;
+    &lt;/li&gt;    &lt;/ol&gt;
+        </p>
+
+    </dd>
+    </dl>
+
+    <p>
+    &lt;p&gt;
+    4) At this point I would simply bounce WebSphere (you are doing this on a
+    preprod or dev server right?). When WAS is started again, you should be
+    able to access the servlet at:
+    &lt;/p&gt;
+    </p>
+
+<dl>
+
+<dt class="normal">&lt;pre&gt;</dt>
+ <dd class="normal">
+ 
+
+<p>
+<a href="http://default_host:default_host_port/wasPerfTool/servlet/perfservlet">http://default_host:default_host_port/wasPerfTool/servlet/perfservlet</a>
+&lt;/pre&gt;
+</p>
+
+
+    <blockquote>
+
+    <p>
+    &lt;p&gt;
+    This should return an XML document that you can then parse for various
+    stats. If you are having any problems, then it is most likely related
+    to your virtual hosts configuration. Check the Virtual Host mapping
+    for the application and if possible test it with anothe virtual host.
+    In our environment, we use admin_host for the perf servlet as we don't
+    HAVE a default_host. We have custom virtual hosts for our apps.
+    &lt;/p&gt;
+    </p>
+
+    <p>
+    &lt;p&gt;
+    I'm not going to include the whole XML output here. You can find a
+    sample of all the types of output available on the IBM WebSphere
+    Information Center. I will, however, include the sections that we
+    monitor - JVM Usage and Connection Pool stats:
+    &lt;/p&gt;
+    </p>
+
+    </blockquote>
+<dl>
+
+<dt class="normal">&lt;pre&gt;</dt>
+ <dd class="normal">
+ 
+
+<p>
+Look here - &lt;jvmRuntimeModule&gt;
+Use the sections below
+&lt;totalMemory&gt;
+&lt;PerfLoadInfo currentValue="1074461.0" integral="5.34383300677E11" mean="1074331.6392452905" time="1151632287170" timeSinceCreate="497410.0" uid="pmi1"/&gt;
+&lt;/totalMemory&gt;
+&lt;freeMemory&gt;
+&lt;PerfNumericInfo time="1151632287170" uid="pmi2" val="604049.0"/&gt;
+&lt;/freeMemory&gt;
+&lt;usedMemory&gt;
+&lt;PerfNumericInfo time="1151632287170" uid="pmi3" val="470411.0"/&gt;
+&lt;/usedMemory&gt;
+&lt;upTime&gt;
+&lt;PerfNumericInfo time="1151632287170" uid="pmi4" val="497.0"/&gt;
+&lt;/upTime&gt;
+&lt;/jvmRuntimeModule&gt;
+</p>
+
+
+ <p>
+ Look here - &lt;jdbc_myjdbc&gt;
+ Use the sections below
+         &lt;poolSize&gt;
+             &lt;PerfLoadInfo currentValue="1.0" integral="48751.0" mean="0.9836366571163392" time="1151633157366" timeSinceCreate="49562.0" uid="pmi5" /&gt; 
+         &lt;/poolSize&gt;
+         &lt;freePoolSize&gt;
+             &lt;PerfLoadInfo currentValue="1.0" integral="43800.0" mean="0.8837415762075784" time="1151633157366" timeSinceCreate="49562.0" uid="pmi6" /&gt; 
+         &lt;/freePoolSize&gt;
+         &lt;concurrentWaiters&gt;
+             &lt;PerfLoadInfo currentValue="0.0" integral="0.0" mean="0.0" time="1151633157366" timeSinceCreate="49565.0" uid="pmi7" /&gt; 
+         &lt;/concurrentWaiters&gt;
+         &lt;faults&gt;
+             &lt;PerfNumericInfo time="1151633157366" uid="pmi8" val="0.0" /&gt; 
+         &lt;/faults&gt;
+         &lt;percentUsed&gt;
+             &lt;PerfLoadInfo currentValue="0.0" integral="49510.0" mean="0.9989508090876075" time="1151633157366" timeSinceCreate="49562.0" uid="pmi9" /&gt; 
+          &lt;/percentUsed&gt;
+          &lt;percentMaxed&gt;
+            &lt;PerfLoadInfo currentValue="0.0" integral="0.0" mean="0.0" time="1151633157366" timeSinceCreate="49562.0" uid="pmi10" /&gt; 
+          &lt;/percentMaxed&gt;
+          &lt;avgUseTime&gt;
+             &lt;PerfStatInfo mean="4951.0" num="1" sum_of_squares="2.4512401E7" time="1151633157366" total="4951.0" uid="pmi12" /&gt; 
+          &lt;/avgUseTime&gt;
+          &lt;avgWaitTime&gt;
+             &lt;PerfStatInfo mean="0.0" num="0" sum_of_squares="0.0" time="1151633157366" total="0.0" uid="pmi13" /&gt; 
+          &lt;/avgWaitTime&gt;
+&lt;/pre&gt;
+ </p>
+
+    <blockquote>
+
+    <p>
+    &lt;p&gt;
+    Those are the sections we concern ourselves with mostly. We watch
+    memory from within the container and we are concerned about our
+    specific connection pools for our application.
+    &lt;/p&gt;
+    </p>
+
+        <blockquote>
+
+        <p>
+        &lt;blockquote&gt;
+        </p>
+
+        <p>
+        &lt;p&gt;
+        There are shortcuts to specific modules if you are interested:
+        &lt;/p&gt;
+        </p>
+
+        </blockquote>
+    </blockquote>
+</dd>
+
+
+<dt class="normal">&lt;pre&gt;</dt>
+ <dd class="normal">
+ 
+
+<p>
+<a href="http://qawas04:9090/wasPerfTool/servlet/perfservlet?Module=jvmRuntimeModule">http://qawas04:9090/wasPerfTool/servlet/perfservlet?Module=jvmRuntimeModule</a>+connectionPoolModule
+&lt;/pre&gt;
+</p>
+
+
+        <blockquote>
+
+        <p>
+        &lt;p&gt;
+        Again a listing of all the modules and definitions are on the IBM
+        website.
+        &lt;/p&gt;
+        </p>
+
+        <p>
+        &lt;/blockquote&gt;
+        </p>
+
+        </blockquote>
+
+    <p>
+    &lt;p&gt;
+    Now that we have WebSphere giving us some useful information, it's just a
+    matter of a little perl to get the job done. In my case we'll use the
+    following modules:
+    &lt;/p&gt;
+    </p>
+
+<dl>
+
+<dt class="normal">&lt;pre&gt;</dt>
+ <dd class="normal">
+ 
+
+<p>
+LWP::Simple
+XML::Simple
+Data::Dumper
+RRDs
+&lt;/pre&gt;
+</p>
+
+
+    <blockquote>
+
+    <p>
+    &lt;p&gt;
+    RRDs is a part of the RRD distribution.
+    &lt;/p&gt;
+    </p>
+
+    <p>
+    &lt;p&gt;
+    I created two rrd files for each stat (jvm and jdbc):
+    &lt;/p&gt;
+    </p>
+
+    </blockquote>
+<dl>
+
+<dt class="normal">&lt;pre&gt;</dt>
+ <dd class="normal">
+ 
+
+<p>
+rrdtool create websphere-jvm.rrd --start 1136809202 --step 300
+DS:load:GAUGE:600:0:100
+RRA:AVERAGE:0.5:1:105120
+RRA:MIN:0.5:1:105120
+RRA:MAX:0.5:1:105120
+RRA:LAST:0.5:1:105120
+</p>
+
+
+ <p>
+ rrdtool create websphere-jdbc.rrd --start 1136809202 --step 300
+ DS:poolSize:GAUGE:600:0:500
+ DS:freePoolSize:GAUGE:600:0:500
+ DS:concurrentWaiters:GAUGE:600:0:500
+ DS:percentUsed:GAUGE:600:0:100
+ DS:avgUseTime:GAUGE:600:0:U
+ DS:avgWaitTime:GAUGE:600:0:U
+ RRA:AVERAGE:0.5:1:105120
+ RRA:MIN:0.5:1:105120
+ RRA:MAX:0.5:1:105120
+ RRA:LAST:0.5:1:105120
+&lt;/pre&gt;
+ </p>
+
+    <blockquote>
+
+    <p>
+    &lt;p&gt;
+    And here's the perl script that does all the work:
+    &lt;/p&gt;
+    </p>
+
+    </blockquote>
+</dd>
+
+
+<dt class="normal">&lt;pre&gt;</dt>
+ <dd class="normal">
+ 
+
+<p>
+#!/usr/bin/perl -w
+use LWP::Simple;
+use XML::Simple;
+use Data::Dumper;
+use RRDs;
+</p>
+
+
+ <p>
+ my $url =
+ "<a href="http://qawas04:9090/wasPerfTool/servlet/perfservlet?Module=jvmRuntimeModule">http://qawas04:9090/wasPerfTool/servlet/perfservlet?Module=jvmRuntimeModule</a>+connectionPoolModule";
+ my $node = "qawas04";
+ my $server = "server1";
+ my $jdbc_driver = "DB2_Database_Driver";
+ my $connpool = "jdbc_myjdbc";
+ my $sysinfo = get $url;
+ my $xml = new XML::Simple;
+ </p>
+
+ <p>
+ $data = $xml-&gt;XMLin($sysinfo);
+ </p>
+
+ <p>
+ # The below line dumps the xml as perl sees it
+ #print Dumper($data);
+ </p>
+
+ <p>
+ my $poolSize = sprintf("%d", $data-&gt;{Node}-&gt;{$node}-&gt;{Server}-&gt;{$server}-&gt;{connectionPoolModule}-&gt;{$jdbc_driver}-&gt;{$connpool}-&gt;{poolSize}-&gt;{PerfLoadInfo}-&gt;{currentValue}
+ );
+ </p>
+
+ <p>
+ my $freePoolSize = sprintf("%d", $data-&gt;{Node}-&gt;{$node}-&gt;{Server}-&gt;{$server}-&gt;{connectionPoolModule}-&gt;{$jdbc_driver}-&gt;{$connpool}-&gt;{freePoolSize}-&gt;{PerfLoadInfo}-&gt;{currentValue}
+ );
+ </p>
+
+ <p>
+ my $percentUsed = sprintf ("%d", $data-&gt;{Node}-&gt;{$node}-&gt;{Server}-&gt;{$server}-&gt;{connectionPoolModule}-&gt;{$jdbc_driver}-&gt;{$connpool}-&gt;{percentUsed}-&gt;{PerfLoadInfo}-&gt;{currentValue}
+ );
+ </p>
+
+ <p>
+ my $concurrentWaiters = sprintf("%d", $data-&gt;{Node}-&gt;{$node}-&gt;{Server}-&gt;{$server}-&gt;{connectionPoolModule}-&gt;{$jdbc_driver}-&gt;{$connpool}-&gt;{concurrentWaiters}-&gt;{PerfLoadInfo}-&gt;{currentValue}
+ );
+ </p>
+
+ <p>
+ my $avgUseTime = sprintf("%d", $data-&gt;{Node}-&gt;{$node}-&gt;{Server}-&gt;{$server}-&gt;{connectionPoolModule}-&gt;{$jdbc_driver}-&gt;{$connpool}-&gt;{avgUseTime}-&gt;{PerfStatInfo}-&gt;{mean}
+ );
+ </p>
+
+ <p>
+ my $avgWaitTime = sprintf("%d", $data-&gt;{Node}-&gt;{$node}-&gt;{Server}-&gt;{$server}-&gt;{connectionPoolModule}-&gt;{$jdbc_driver}-&gt;{$connpool}-&gt;{avgWaitTime}-&gt;{PerfStatInfo}-&gt;{mean}
+ );
+ </p>
+
+ <p>
+ # sample command
+ # rrdtool update elmsdb-connections.rrd 1101963372:9
+ my $timestamp = time();
+ #print "rrdtool update websphere-jvm.rrd $timestamp:$jvmpercent\n";
+ RRDs::update ("websphere-jdbc.rrd", "--template", "poolSize:freePoolSize:concurrentWaiters:percentUsed:avgUseTime:avgWaitTime", "N:$poolSize:$freePoolSize:$concurrentWaiters:$percentUsed:$avgUseTime:$avgWaitTime");
+ RRDs::update ("websphere-jvm.rrd", "--template", "load", "N:$percentMemUsed");
+ print "\n
+ $poolSize\n
+ $freePoolSize\n
+ $concurrentWaiters\n
+ $percentUsed\n
+ $avgUseTime\n
+ $avgWaitTime\n
+ \n";
+&lt;/pre&gt;
+ </p>
+
+    <blockquote>
+
+    <p>
+    &lt;p&gt;
+    Mind you this is far from a detailed discussion of the delicates of
+    wasPerfTool. I just wanted to show you how to get the data out. In terms
+    of integration with Nagios, you can use check_rrd or your own plugin to
+    get the values out of the RRD file or you can simply get the input
+    directly and send it to Nagios, letting whatever perfdata handler you have
+    do all the work!
+    &lt;/p&gt;
+    </p>
+
+    </blockquote>
+</dd>
+</dl>
+
+<p>
+&lt;img src="websphere-rrd.png"  /&gt;
+</p>
+
+<p>
+&lt;hr /&gt;
+</p>
+
+      <blockquote>
+
+      <p>
+      &lt;div class="note"&gt;
+      &lt;p&gt;&lt;span class="notetitle"&gt;Note&lt;/span&gt;&lt;/p&gt;
+      </p>
+
+          <blockquote>
+
+          <p>
+          &lt;blockquote&gt;
+          </p>
+
+          <p>
+          &lt;p&gt;
+          Last Modified 07/07/2006 13:04
+          &lt;/p&gt;
+          </p>
+
+          </blockquote>
+      </blockquote>
+
+<p>
+&lt;a href="http://creativecommons.org/licenses/by-sa/2.5/"&gt;
+&lt;img src="<a href="http://creativecommons.org/images/public/somerights20.png">http://creativecommons.org/images/public/somerights20.png</a>"  alt="Creative Commons License" title="Creative Commons Attribution-ShareAlike 2.5" /&gt;
+&lt;/a&gt;
+</p>
+
+          <blockquote>
+
+          <p>
+          &lt;p&gt;
+          This work is licensed under a &lt;a href="http://creativecommons.org/licenses/by-sa/2.5/" title="Creative Commons Attribution-ShareAlike 2.5"&gt;Creative Commons Attribution-ShareAlike 2.5&lt;/a&gt; License.
+          &lt;/p&gt;
+          </p>
+
+          <p>
+          &lt;/blockquote&gt;
+      &lt;/div&gt;
+          </p>
+
+          </blockquote>
+
+<p>
+&lt;/body&gt;
+&lt;/html&gt;
+</p>
+
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</body>
+</html>
+

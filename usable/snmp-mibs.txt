@@ -1,0 +1,34 @@
+I'm not a big fan of using OIDs when there's a valid MIB file availble for a device.
+
+Here is my snmp.conf for net-snmp with the mib files I use regularly::
+
+    ###########################################################################
+    #
+    # snmp.conf
+    #
+    #   - created by the snmpconf configuration program
+    #
+    mibdirs +/etc/snmp/ns5.1
+    mibfile /etc/snmp/cyacs.mib
+    mibfile /etc/snmp/hp/hpicfoid.mib
+    mibfile /etc/snmp/hp/hpentmib.mib
+    mibfile /etc/snmp/hp/hpicftc.mib
+    mibfile /etc/snmp/hp/hpSwitchConfig.mib
+    mibfile /etc/snmp/hp/hpSwitchDma.mib
+    mibfile /etc/snmp/hp/hpSwitchDrivers.mib
+    mibfile /etc/snmp/hp/hpSwitchStack.mib
+    mibfile /etc/snmp/hp/hpSwitchStat.mib
+    mibfile /etc/snmp/hp/hpNetSwitch.mib
+    mibfile /etc/snmp/hp/hpicfChassis.mib
+    mibfile /etc/snmp/hp/hpicfGenRptr.mib
+    mibfile /etc/snmp/hp/rfc2108.mib
+    mibfile /etc/snmp/hp/hpicfEtwist.mib
+
+
+The first entry points to the directory where we store our mib files for the netscreen product line.
+
+The second entry is for our Cyclades ACS devices.
+
+The rest of those in the list are for our HP switches. They have to be loaded in that order (at least I had problems when they weren't).
+
+.. footer:: footer.txt

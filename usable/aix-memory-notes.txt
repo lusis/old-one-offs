@@ -1,0 +1,17 @@
+Here are a couple of quick one-liners we use in scripts to feed data to nagios.
+
+One of the problems we ran into was a bug in the AIX 5.3 snmp daemon that reporting some values improperly (mainly cpu but we decided to use nrpe and custom scripts)
+
+    Percentage of memory in use::
+
+        # svmon | grep memory | awk '{ print ($3/$2)*100 }'
+        50.3664
+
+    Percentage of swap in use::
+
+        # lsps -a | grep rootvg | awk '{print $5}'
+        10
+
+These numbers are reported back to Nagios via NRPE
+
+.. footer:: footer.txt

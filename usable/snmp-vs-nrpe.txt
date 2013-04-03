@@ -1,0 +1,73 @@
+
+One of the challenges we faced in monitoring was HOW to run non-standard commands on the remote server. DB2 used to have an snmp interface but discontinued it in version 8 which is what we were using.
+
+How then to get the information we needed?
+
+1) Install the DB2 client on our monitoring server, create a NAGIOS user on the database and run queries from there. (for db2 statistics)
+2) Use SSH to connect to the remote server and issue the commands.
+3) Use NRPE and run the commands
+4) Use SNMP
+
+When DB2 was running on our Linux server, we simply modified the net-snmp snmpd.conf on the remote server to pass the OID to a script.
+We then called it with check_snmp:
+
+Modifications to snmpd.conf::
+
+    enterprises.ucdavis.extTable.extEntry.extIndex.1 = 1
+    enterprises.ucdavis.extTable.extEntry.extNames.1 = "Statistics for random program"
+    enterprises.ucdavis.extTable.extEntry.extCommand.1 = "/path/to/stat-gathering-script.sh
+
+It could then be called with check_snmp like so::
+
+    check_snmp -H $HOSTNAME -o $OID -l "Number of Database Connections" -t 60 -C $COMMUNITY -w $WARN -c $CRIT
+
+where $OID=enterprises.ucdavis.extTable.extEntry.extOutput.1
+
+When we moved to AIX, we could not do this so we started using NRPE.
+
+section from nrpe.cfg::
+
+    command[check_udb_connections]=/udb/instance/scr/UdbConnSNMP.sh
+
+You can see that we kept the same script name. We're just calling it differently. One of the downsides of using NRPE is the security risk associated with allowing user arguments to NRPE. Because of this, we have to change our thresholds for things like `db2 snapshots <readme-sample-connection-count-script.html>`__ at warning on the remote side.
+
+We use a wrapper script for this on the Nagios server side to format the output with performance data:
+(please note that this script bites and needs to be rewritten. It uses hard coded values IN the script for WARN and CRIT)
+(please also note that it's nicer when we want to change our thresholds WITHOUT restarting nagios. Next invocation == new thresholds!)
+
+    ::
+
+        #!/bin/bash
+        BINDIR=/usr/nagios/libexec
+        HOSTNAME=$1
+        WARN=290
+        CRIT=310
+        MIN=0
+        MAX=600
+        CHECKCOMMAND=`$BINDIR/check_nrpe -H $1 -t 60 -c check_udb_connections`
+        #CONNECTIONS=`echo $CHECKCOMMAND | sed -e 's/|.*$//g' | awk '{print $0"|number_of_connections="$NF}' | sed -e 's/*//g'`
+        CONNECTIONS=`echo $CHECKCOMMAND`
+
+        if [ ${CONNECTIONS} -ge ${CRIT} ]; then
+                NAGSTATUS="CRITICAL"
+        elif [ ${CONNECTIONS} -ge ${WARN} ]; then
+                NAGSTATUS="WARNING"
+        else
+                NAGSTATUS="OK"
+        fi
+
+        echo "UDB Connection Count: ${CONNECTIONS} ; ${NAGSTATUS} | number_of_connections=$CONNECTIONS;$WARN;$CRIT;$MIN;$MAX"
+
+        if [ ${NAGSTATUS} = "CRITICAL" ]; then
+                        exit 2
+        elif [ ${NAGSTATUS} = "WARNING" ]; then
+                        exit 1
+        elif [ ${NAGSTATUS} = "OK" ]; then
+                        exit 0
+        else
+                        exit 3
+        fi 
+
+As always the disclaimer is that it works for us.
+
+.. footer:: footer.txt

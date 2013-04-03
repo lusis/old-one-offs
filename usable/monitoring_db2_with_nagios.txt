@@ -1,0 +1,375 @@
+.. warning::
+
+    This is just a dump of what we currently do to monitor DB2 at my company using nagios. We've moved from DB2 on Linux to DB2 on AIX and we used modified versions of the same scripts for each. This is also a work in progress (i.e. "I'm typing it as we speak and will have to stop for various meetings" kind of work in progress). Also be aware that I am *NOT* a DBA. There may be syntax errors or out and out stupid mistakes. I'm approaching this from a Systems and Monitoring perspective
+
+Initial notes:
+When we started our DB2 implementation, we didn't know what to monitor. Over time we determined what was important to us in terms of metrics that could point to evolving trouble in our database. We looked at various commercial vendor tools but none of them provided a Linux/x86 agent (i.e. BMC Patrol or Quest Spotlight) despite claims of Linux support.
+
+Since we were already monitoring servers from a base level (cpu/disk/memory/availability), it made sense to try and integrate what information we could get into Nagios. One of our challenges was finding information on what to query. We didn't have very experienced DB2 UDB DBAs on hand and had trouble finding any.
+
+One thing that really helped us get at the information was Embarcadero's DBArtisan. I had a friend who went to work in technical sales for Embarcadero and got him in the door to demo the product. We had it running when we were having a production issue and the tool showed us what our problem was. Once we had that information, we needed to get it into Nagios. A nice side effect of using DBArtisan is that it logs the SQL it uses to get its information.
+
+Now that we've migrated our DB2 implementation to AIX, we have more doors open in terms of commercial products but since we're doing fine on Nagios, we're going to stick with it.
+
+Things to monitor in DB2:
+( please note that many of these things are specific to OUR environment and what we are concerned about )
+    - Connection count
+    - Tablespace Usage
+    - Bufferpool Stats
+    - Locking Stats
+
+
+I would consider those to be the key four areas that are important to us. Mind you I'm not a DBA but considering I've had to fill in as DBA for 3 years, watching those things can indicate for us a problem. You can also monitor things like locks and sort overflows but those require a bit more scripting. I'll address some of those at the end.
+
+Connection Count 
+
+We run a J2EE web-based application developed in house. This causes alot of confusion to our typical DBA who thinks 1 connection == 1 user. We currently run 8 application servers with max connection pool sizes of 50 and minimum of 25 connection per server. We don't MAINTAIN a minimum of 25 connections per server but we don't drop below that when we reach it. (This will seem familiar to those of you using Websphere 5.x). What this translates to is that at peak time for us (midday) we will have 200 (25*8) connections to the database at a minimum. Many times we rise above this.
+
+There are, however, a few things to note about these connections. 90% of these connections are idle ("UOW Waiting" in DB2 terms). The are simply open connections waiting to be used. In our case, at our peak time of day, we have 10 conncurent ACTIVE connections ( "UOW Executing" in DB2 terms ). There are a few other UOW states but these two are really the ones that mean something to us. In DB2 terms, an application is a connection to the database. This will cause a bit of confusion to non-DB2 types. I can't tell you how many times the DBA has said "I see 15 applications connected" and someone else say "But we only have one application!".
+        
+        You can get a list of connections to your database using the following command::
+
+            db2 list applications
+
+        which will return the following:
+
+::
+
+    Auth Id  Application    Appl.      Application Id                 DB       # of
+             Name           Handle                                    Name    Agents
+    -------- -------------- ---------- ------------------------------ -------- -----
+    DB2INST1 db2bp          505        *LOCAL.db2inst1.060627204116   DBTEST  4    
+    DB2INST1 db2bp          490        *LOCAL.db2inst1.060627202219   DBTEST  4    
+    ETLUSR   db2jcc_applica 422        GA0A00EF.GA7D.060627192511     DBTEST  4    
+    APPUSR   db2jcc_applica 494        GA0A00D1.GDFF.060627202646     DBTEST2 4    
+    APPUSR   db2jcc_applica 464        GA0A00D1.GDFE.060627202629     DBTEST2 4    
+    DB2INST1 db2bp          182        *LOCAL.db2inst1.060627202420   DBTEST2 4    
+    APPUSR   db2jcc_applica 446        GA000B22.D4EA.060627195623     DBTEST2 4    
+    APPUSR   db2jcc_applica 385        GA000B22.D478.060627175512     DBTEST2 4    
+    APPUSR   db2jcc_applica 386        GA0A0038.G49D.060627171202     DBTEST2 4    
+    APPUSR   db2jcc_applica 372        GA0A0038.G49C.060627170050     DBTEST2 4    
+    APPUSR   db2jcc_applica 376        GA000B22.D425.060627165047     DBTEST2 4    
+    APPUSR   db2jcc_applica 371        GA000B22.D424.060627163537     DBTEST2 4    
+    APPUSR   db2jcc_applica 326        GA0A0088.GDA4.060627152730     DBTEST2 4    
+    APPUSR   db2jcc_applica 352        GA0A0088.GDA0.060627152706     DBTEST2 4    
+
+What you see here is the username (Auth Id), the name of the application name given by the connecting application (Application Name), the db2 pid of the application (Appl. Handle), Application Id (can be used to trace back to a specific connecting host), name of the database being used (DB Name) and the number of agents used by the connection (# of Agents). Agents are outside the scope of connections for now. I may address those later. 
+
+More detailed information about connections can be grabbed by appending "show detail" to the end of the "db2 list applications" command. The format is much wider so I'll only show one row::
+
+    DB2INST1 db2bp 505 *LOCAL.db2inst1.060627204116 0003 4 0 1089698 UOW Waiting Not Collected  DBTEST  /udb/instance/db2inst1/NODE0000/SQL00001/db2inst1/NODE0000/SQL00001/
+
+The key fields here to note (for the purposed of monitoring) is the "Status" column. In the example, the status is "UOW Waiting" which means the connection is idle. All the other fields are really only applicable for the DBA in troubleshooting a specific application.
+
+Click here to see a sample script similar to what we use to monitor connection count
+
+Tablespace Usage
+
+        DB2 use chunks of disk space known as tablespaces to store data ( and despite its name - indexes ). There are two types of tablespaces in DB2 (excluding raw volumes which are a whole other beast):
+
+        1. DMS - database managed space
+        2. SMS - system managed space
+
+        With DMS tablespaces, DB2 defines how much space is available in a tablespace and that's all it gets. When you create the tablespace, you must specify the location and file to use for the DMS tablespace and the number of 4K pages to allocate.
+        ::
+                
+            CREATE TABLESPACE ACCOUNT_TS MANAGED BY DATABASE USING (FILE '/udb/tablespace/PROD/ACCOUNT_TS 50000)
+
+        DB2 will create a file called ACCOUNT_TS that is ~195MB in size - [(50000 * 4096)/1024/1024]. From a system perspective you cannot see how much of that is being used (i.e. using df or du). The only way to see how much of that space is being used is using db2 commands:
+        ::
+
+            db2 list tablespace show detail
+
+        This command will list the detail of ALL tablespaces for the database to which you are currently connected.
+
+        ::
+
+                       Tablespaces for Current Database
+
+             Tablespace ID                        = 0
+             Name                                 = SYSCATSPACE
+             Type                                 = System managed space
+             Contents                             = Any data
+             State                                = 0x0000
+               Detailed explanation:
+                 Normal
+             Total pages                          = 31727
+             Useable pages                        = 31727
+             Used pages                           = 31727
+             Free pages                           = Not applicable
+             High water mark (pages)              = Not applicable
+             Page size (bytes)                    = 4096
+             Extent size (pages)                  = 32
+             Prefetch size (pages)                = 192
+             Number of containers                 = 1
+
+             Tablespace ID                        = 1
+             Name                                 = PROD_USER_TEMP
+             Type                                 = System managed space
+             Contents                             = User Temporary data
+             State                                = 0x0000
+               Detailed explanation:
+                 Normal
+             Total pages                          = 1
+             Useable pages                        = 1
+             Used pages                           = 1
+             Free pages                           = Not applicable
+             High water mark (pages)              = Not applicable
+             Page size (bytes)                    = 4096
+             Extent size (pages)                  = 32
+             Prefetch size (pages)                = 32
+             Number of containers                 = 1
+
+             Tablespace ID                        = 2
+             Name                                 = PROD_SYSTEM_TEMP
+             Type                                 = System managed space
+             Contents                             = System Temporary data
+             State                                = 0x0000
+               Detailed explanation:
+                 Normal
+             Total pages                          = 2
+             Useable pages                        = 2
+             Used pages                           = 2
+             Free pages                           = Not applicable
+             High water mark (pages)              = Not applicable
+             Page size (bytes)                    = 4096
+             Extent size (pages)                  = 64
+             Prefetch size (pages)                = 768
+             Number of containers                 = 2
+
+             Tablespace ID                        = 3
+             Name                                 = ACCOUNT_TS
+             Type                                 = Database managed space
+             Contents                             = Any data
+             State                                = 0x0000
+               Detailed explanation:
+                 Normal
+             Total pages                          = 50000
+             Useable pages                        = 49920
+             Used pages                           = 29824
+             Free pages                           = 20096
+             High water mark (pages)              = 36608
+             Page size (bytes)                    = 4096
+             Extent size (pages)                  = 64
+             Prefetch size (pages)                = 64
+             Number of containers                 = 1
+
+
+Now this output contains other information but the part we're concerned about is "Tablespace ID 3" which is our ACCOUNT_TS.
+As you can see the name of the tablespace is list (Name), the type of tablespace (Type) and other information specfic to the tablespace ACCOUNT_TS.
+Let's look at the following sections:
+
+ Total pages                          = 50000
+ Useable pages                        = 49920
+ Used pages                           = 29824
+ Free pages                           = 20096
+ High water mark (pages)              = 36608
+
+Total pages matches up with how big we created the tablespace file (50000 page or 195MB). We can see that 49920 of those pages are usable (the remainder is DB2 overhead for managing the tablespace) and that of those 49920 pages, 29824 are already used leaving us with 20096 usable. Another note is the high watermark of 36608.
+
+This means that this particular tablespace is 59% used.
+
+.. Note::
+         The high water mark is the highest number of pages that have been used in this tablespace. You may have deleted data to get down to 29824 pages of data used but at one point you had 36608 pages used. DB2 will allow you to shrink tablespaces if you've over allocated but you can never shrink below the high water mark. There are two ways to reset the high water mark:
+
+        1) Unload the data, drop the tablespace, recreate the tablespace and reload the data
+        2) REORG the tablespace which relocates the pages physically (like a defrag for tablespaces)
+
+If you want a shorter format of information about the tablespace above, you can issue the following command::
+
+            db2 list tablespace containers for 3 show detail
+
+which will give you the following output::
+
+                     Tablespace Containers for Tablespace 3
+
+             Container ID                         = 0
+             Name                                 = /udb/tablespace/PROD/container1/ACCOUNT_TS
+             Type                                 = File
+             Total pages                          = 50000
+             Useable pages                        = 49920
+             Accessible                           = Yes
+
+
+Alas this only shows you total usable pages so it's really not useful. It does show you if the tablespace is Accessible or not so it might be useful for monitoring when any tablespace goes offline for some reason.
+
+
+Bufferpool Stats
+
+    Before we discuss bufferpools, let's discuss something that any Unix guy knows (or should know)...File system caching.
+
+    When a file is read from the filesystem, the pages read are cached into memory. This caching is configurable in various places depending on the OS (AIX - minperm/maxperm values, Linux - sysctl.conf/proc filesystem).
+
+There are multiple layers of cache in any application stack:
+    1) Physical Disk Cache
+    2) SAN Cache
+    3) OS fs cache
+    4) Database cache
+    5) Application level cache (i.e. Hibernate)
+
+    Every physical disk has a cache (usually called a buffer). You typically
+    see 8 or 16MB buffers on your typical SATA drives. 
+
+    Any decent SAN will also have a global cache for the entire SAN complex.
+    The DS4300 Standard SAN comes with 128MB per controller and can go up to
+    1GB per controller. The DS6800 can go up to 2GB of cache per controller
+    for a total of 4GB. The max specs on a DS8000 line SAN are 256GB of cache
+    for the DS8300 (which already comes with 32GB of cache minimum!). Of
+    course the DS8000 SAN is powered by 2 IBM pSeries units.
+
+    Additonally, your operating system will cache any data read. This is where
+    physical memory that you are most concerned about (that of the system
+    itself) comes into play. 
+
+    Databases like PostgreSQL are very dependant on the OS doing the work of
+    caching data pages. MySQL has some of its own memory settings and if you
+    are using InnoDB tables, you have a stripped down version of what DB2
+    provides in the form of bufferpools.
+
+DB2 Bufferpools:
+
+        Basically DB2 bufferpools are intelligent data caches for your
+        database. Where PG caches ANY data read by the Postgres engine and
+        InnoDB bufferpools are caching data read from InnoDB tables, DB2 has
+        chunks of memory that can be allocated to specific tablespaces. It's a
+        more intelligent (in terms of WHAT to cache) method than the PG or
+        MySQL method. 
+
+        Let me explain what I mean by intelligent. Let's say I select a chunk
+        of data from my database (e.g. 1000 rows). That data is stored on the
+        disk somewhere. Let's say my 1000 row SELECT reads 9k of data from
+        the disk. My OS uses 4k block sizes. I've now had to read 3 blocks
+        from disk to get my 9k of data thus I've allocated a total of 12k of
+        data in my filesystem cache. I have 3k of data sitting out in cache
+        that I don't need. Eventually if I don't access that other 3k of data,
+        it will get pushed out of the cache to make room for other data.
+        Chances are that I will probably read that additional 3k at some point
+        before it expires and will have saved myself a disk read.
+
+        Of course this assumes that all of your access is sequential in
+        nature. This may be true of database log files or XML files but not
+        typical of DB2 tablespaces (or PG tablespaces for that matter).
+        Databases are typically random access beasts (with the exception of,
+        say, a temp tablespace). If I have a 256MB tablespace file, my 9k of
+        data may be spread across several pages inside that tablespace file.
+
+        It's quite possible on a HIGHLY fragmented database, that I could need
+        to read a single 4k page for each 1k of data that I need. This means
+        that I now have 36k of memory in use for 9k of data. That's alot of
+        waste. Who knows your data better, a "dumb" OS filesystem cache or the
+        database reading the data? This is where the bufferpool comes in to
+        play.
+
+        Even if I don't create and assign any bufferpools on my own, DB2 will
+        create a bufferpool called IBMDEFAULTBP that is 250 4k pages (1MB) in size. 
+        Additionally it creates a few other bufferpools depending on the
+        various page sizes in use in your database.
+
+        DB2 manages the data stored in the bufferpool internally and flushes
+        data in and out as needed using processes called IO cleaners to move
+        dirty (unwritten) data to disk and prefetchers to read the data from
+        disk. Both the number of io cleaners and prefetch size are
+        configurable parameters.
+
+        Now that we understand everything from disk to database (in a sense),
+        you can see that we have a triple lever of caching going on and on the
+        OS itself a PENALTY as the OS is caching a bunch of diskpages as well
+        as DB2 internally caching those thus taking twice the amount of memory
+        from our system.
+
+        In the past (and in some very high throughput environments), we've
+        used raw volumes (where supported) to store our tablespaces. Raw
+        volumes are not cached by the operating system and thus memory usage
+        drops. While we are talking about numbers in the few kb and mb range
+        above, our production environment has several bufferpools in the
+        384000 page range and we have a separate bufferpool for data and
+        index tablespaces. Those tablespaces themselves are sized with 5
+        million pages for the index tablespace and 11 million pages for the
+        data ( roughly 20GB of index tablespace and 40GB of data tablespace
+        using a 1.5GB index bufferpool and a 1.5GB data bufferpool). That's
+        alot of data for your OS to cache that will probably be hit 20% of the
+        time.
+
+        Raw volumes have a gigantic performance benifit but come at the
+        expense of manageability. You can't do a simple 'df -k' to see how
+        much space is left on a raw volume.
+
+        Fortunately for all but the most demanding environments, DB2 now has a
+        hybrid option when creating a tablespace. The "NO FILESYSTEM CACHING"
+        option in a CREATE or ALTER tablespace will tell the OS to NOT cache
+        the data and thus you will not get the double memory hit. As I said, a
+        few MB is not a big deal on a tiny lookup table that will fit entirely
+        in memory but a 40 or 60GB monster can quickly consume the largest
+        boxes trying to be agressive at caching.
+
+        So how do we determine how efficient our bufferpools are? While it may
+        be tempting to create a huge bufferpool for each tablespace, you may
+        oversize the bufferpool and be wasting memory. As with SAN monitoring,
+        you have to track the "hit ratio" of the bufferpool. Basicaly this
+        says "Of the data I have cached in memory, how many times am I
+        actually reading that data from memory?" The general rule is your hit
+        ratio should be above 98%. If your hit ratios are always 100%, you
+        should start decreasing the size of the bufferpool until you get int
+        othe 98% range. This means you aren't overallocated but 98% of the
+        time, you won't have to issue a disk read.
+
+        Unfortunately, getting the bufferpool statistics aren't as easy as
+        getting the tablespace statistics. It requires you to enable snapshots
+        for your database and then take a snapshot of your bufferpool usage::
+
+            db2 get snapshot for bufferpools on MYDB
+
+        is the command used to get the bufferpool statistics.
+
+        Depending on the number of bufferpools, your output will be pretty
+        long. Below is a section for the IBM Default bufferpool::
+
+                        Bufferpool Snapshot
+
+                        Bufferpool name                            = IBMDEFAULTBP
+                        Database name                              = MYDB
+                        Database path                              = /udb/tablespace/MYDB/db2inst1/NODE0000/SQL00001/
+                        Input database alias                       = MYDB
+                        Snapshot timestamp                         = 07/05/2006 13:12:27.621450
+
+                        Buffer pool data logical reads             = 4660835
+                        Buffer pool data physical reads            = 1014
+                        Buffer pool temporary data logical reads   = 557044348
+                        Buffer pool temporary data physical reads  = 62028
+                        Buffer pool data writes                    = 1614370
+                        Buffer pool index logical reads            = 12830785
+                        Buffer pool index physical reads           = 514 
+       
+       In the above output, there are 4 values to use when calculating hit
+       ratios:
+
+            1.  Buffer pool data logical reads - the number of data pages read from the bufferpool that were memory reads.
+            2.  Buffer pool data physical reads - the number of data pages that had to be pulled from a physical disk read
+            3.  Buffer pool index logical reads - the number of index pages read from the bufferpool that were memory reads
+            4.  Buffer pool index physical reads - the number of index pages that had to be pulled from a physical disk read
+
+        You may see 0 on the index or data lines if you have a separate
+        bufferpool for indexes and data.
+
+        Using the above example, we can calculate the data hit ratio of the
+        IBMDEFAULTBP bufferpool::
+            
+            ( data logical reads / (data logical reads + data physical reads) )* 100 = hit ratio
+
+            or
+
+            ( 4660835 / 4661849 ) * 100 = 99.9
+
+
+        The same forumla holds true for index hit ratio as well.
+
+        IF you want to get these numbers into Nagios, you'll have to use a
+        check_by_ssh or nrpe to execute the command as a local SYSADM user on
+        the database server itself as snapshots cannot be run from a remote
+        database connection without attaching to the remote instance. All of
+        our scripts that we use for this process are written in perl. I'm sure
+        you could do it with ksh or bash but its much quicker to get it
+        working in perl.
+
+.. footer:: footer.txt
+

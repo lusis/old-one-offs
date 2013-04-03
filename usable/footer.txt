@@ -1,0 +1,18 @@
+
+---------------------------------------------------------------------------------------------------
+
+.. note::
+
+    Last Modified |date| |time|
+
+    .. image:: http://creativecommons.org/images/public/somerights20.png
+        :alt: Creative Commons License
+        :target: http://creativecommons.org/licenses/by-sa/2.5/
+        :title: Creative Commons Attribution-ShareAlike 2.5
+
+    This work is licensed under a `Creative Commons Attribution-ShareAlike 2.5`_ License.
+
+.. |date| date:: %m/%d/%Y
+.. |time| date:: %H:%M
+
+.. _Creative Commons Attribution-ShareAlike 2.5: http://creativecommons.org/licenses/by-sa/2.5/
